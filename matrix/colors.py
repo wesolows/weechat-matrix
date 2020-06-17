@@ -683,7 +683,17 @@ class MatrixHtmlParser(HTMLParser):
                         self.add_substring(self.text, self.attributes.copy())
                     self.text = ""
                     self.attributes["bgcolor"] = color
-
+        elif tag == "a":
+            for key, value in attrs:
+                if key in ["href"]:
+                    if value.startswith("https://matrix.to/#/@"):
+                        continue
+                    if self.text:
+                        self.add_substring(self.text, self.attributes.copy())
+                    self.text = ""
+                    self.add_substring("[", DEFAULT_ATTRIBUTES.copy())
+                    self.add_substring(value, DEFAULT_ATTRIBUTES.copy())
+                    self.add_substring("]", DEFAULT_ATTRIBUTES.copy())
         else:
             pass
 
